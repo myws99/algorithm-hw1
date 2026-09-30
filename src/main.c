@@ -1,4 +1,4 @@
-/* 정렬 비교 — 삽입 / 버블 / 블록.
+/* 정렬 비교 — 퀵 / 병합 / 힙.
  *
  *   make run                 사람이 읽는 비교 표
  *   ./src/main.out --csv     같은 측정을 CSV로 (tools/plot.py가 쓴다)
@@ -108,7 +108,7 @@ static void printDeclarations(void) {
 }
 
 static void reportTable(void) {
-    printf("=== 정렬 비교: 삽입 · 버블 · 블록 ===\n");
+    printf("=== 정렬 비교: 퀵 · 병합 · 힙 ===\n");
     printf("원소는 (key, tag) %zu바이트. key로 정렬하고 tag로 안정성을 본다.\n\n",
            sizeof(Record));
     printDeclarations();
@@ -116,10 +116,9 @@ static void reportTable(void) {
 
     printf("\n읽는 법\n");
     printf("  시간   : 같은 기계에서만 견준다. 비교·이동 횟수가 더 믿을 만하다.\n");
-    printf("  메모리 : 셋 다 제자리 정렬이라 원소 한 칸(%zu B)뿐이다. 블록 정렬은\n",
+    printf("  메모리 : 퀵·힙은 제자리 정렬이라 원소 한 칸(%zu B)뿐이고, 병합은 n/2칸 보조 배열을 쓴다.\n",
            sizeof(Record));
-    printf("           그 값을 지키면서 비교 횟수를 O(n^2)에서 끌어내린 것이 핵심이다.\n");
-    printf("           대신 재귀 깊이가 1이 아니다 — 그만큼 스택을 쓴다.\n");
+    printf("           퀵·병합은 재귀 깊이만큼 스택도 쓴다 (메모리 열에는 안 잡힌다).\n");
     printf("  안정성 : 표의 주장이 아니라 tag 순서로 실측한 값이다.\n");
 }
 
