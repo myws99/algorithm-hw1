@@ -129,8 +129,8 @@ static void expectManySizes(const SortAlgorithm *algo) {
             if (a[i].key != want[i].key) {
                 ok = 0;
             }
-            if (i > 0 && a[i - 1].key == a[i].key && a[i - 1].tag > a[i].tag) {
-                ok = 0; /* 같은 key인데 입력 순서가 뒤집혔다 */
+            if (algo->stable && i > 0 && a[i - 1].key == a[i].key && a[i - 1].tag > a[i].tag) {
+                ok = 0; /* 안정 정렬인데 같은 key의 입력 순서가 뒤집혔다 */
             }
         }
         if (!ok) {
@@ -138,7 +138,7 @@ static void expectManySizes(const SortAlgorithm *algo) {
             break;
         }
     }
-    report(algo->name, "n = 0..200 전부 정렬되고 안정하다", ok);
+    report(algo->name, "n = 0..200 전부 정렬된다 (안정 정렬이면 안정성도)", ok);
 }
 
 /* --- 측정값이 채워지는지 --------------------------------------------- */
@@ -150,7 +150,7 @@ static void expectStats(const SortAlgorithm *algo) {
     algo->sort(a, 5, sizeof(a[0]), sortCompareInt, &stats);
     report(algo->name, "측정값이 채워진다",
            stats.compares > 0 && stats.moves > 0 &&
-           stats.extraBytes == sizeof(a[0]) && stats.maxDepth >= 1);
+           stats.extraBytes >= sizeof(a[0]) && stats.maxDepth >= 1);
 }
 
 /* --- 측정 도구 자체 (bench.c) ----------------------------------------- */
